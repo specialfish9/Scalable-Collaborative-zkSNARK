@@ -7,9 +7,11 @@ set -euo pipefail
 IMAGE="hyperplonkpp-benchmarks"
 DOCKERFILE="hack/docker/Dockerfile"
 
+# Packing size l: the protocol requires exactly 8*l parties.
 L=${1:-2}
+# log2 of the circuit size.
 M=${2:-10}
-N=$((2**L))
+N=$((8*L))
 
 NETWORK="worker-net"
 SUBNET="172.30.0.0/24"
@@ -26,9 +28,9 @@ CONTAINER_PREFIX="worker"
 
 echo "------------------------------"
 echo "Configuration:"
-echo "  L = $L"
-echo "  M = $M"
-echo "  N = $N"
+echo "  L (packing size l) = $L"
+echo "  M (log2 circuit) = $M"
+echo "  N (workers, = 8*l) = $N"
 echo "  Network = $NETWORK"
 echo "  Subnet = $SUBNET"
 echo "  Log dir = $LOG_DIR"

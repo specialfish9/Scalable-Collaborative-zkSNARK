@@ -184,6 +184,15 @@ pub async fn dhyperplonk<E: Pairing, Net: MPCSerializeNet>(
 > {
     let gate_count = 1 << n;
 
+    assert_eq!(
+        net.n_parties(),
+        pp.n,
+        "party count mismatch: got {} parties but the packed sharing parameters require pp.n = 8*l = {} (l = {}); they must be equal",
+        net.n_parties(),
+        pp.n,
+        pp.l
+    );
+
     // Jump from sky
     let local_s_p = random_evaluations(gate_count * 4 / net.n_parties());
     let local_s = random_evaluations(gate_count * 4 / net.n_parties() / pp.l);
@@ -294,6 +303,7 @@ pub async fn dhyperplonk<E: Pairing, Net: MPCSerializeNet>(
     }
 
     // 2.b compute com_s using distributed PCS
+    eprintln!("the length of local_s_p is {} while g is {}", local_s_p.len(), 2);
     wiring_commits.push(
         pk.d_commitment
             .d_commit(&local_s_p, &net, sid)
@@ -597,6 +607,15 @@ pub async fn dhyperplonk_data_parallel<E: Pairing, Net: MPCSerializeNet>(
     MPCNetError,
 > {
         let gate_count = 1 << n;
+
+    assert_eq!(
+        net.n_parties(),
+        pp.n,
+        "party count mismatch: got {} parties but the packed sharing parameters require pp.n = 8*l = {} (l = {}); they must be equal",
+        net.n_parties(),
+        pp.n,
+        pp.l
+    );
 
     // Jump from sky
     let local_s_p = random_evaluations(gate_count * 4 / net.n_parties());
@@ -981,6 +1000,15 @@ pub async fn dpermcheck<E: Pairing, Net: MPCSerializeNet>(
 > {
     let gate_count = 1 << n;
 
+    assert_eq!(
+        net.n_parties(),
+        pp.n,
+        "party count mismatch: got {} parties but the packed sharing parameters require pp.n = 8*l = {} (l = {}); they must be equal",
+        net.n_parties(),
+        pp.n,
+        pp.l
+    );
+
     // Now run the protocol.
     let local_s = random_evaluations(gate_count * 4 / net.n_parties() / pp.l);
     let local_s_p: Vec<E::ScalarField> = random_evaluations(gate_count * 4 / net.n_parties());
@@ -1267,6 +1295,15 @@ pub async fn cpermcheck<E: Pairing, Net: MPCSerializeNet>(
     MPCNetError,
 > {
     let gate_count = (1 << n) / pp.l;
+
+    assert_eq!(
+        net.n_parties(),
+        pp.n,
+        "party count mismatch: got {} parties but the packed sharing parameters require pp.n = 8*l = {} (l = {}); they must be equal",
+        net.n_parties(),
+        pp.n,
+        pp.l
+    );
 
     // Now run the protocol.
     net.sync().await?;

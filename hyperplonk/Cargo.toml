@@ -11,7 +11,7 @@ local-multi-thread = ["comm"] # local simulating with tokio in multi-thread
 leader = ["single_thread"] # local ONLY leader running its own part without actual communication
 
 single_thread = [] # with tokio in single thread
-comm = [] # with actual communication
+comm = ["dist-primitive/comm"] # with actual communication
 
 [dependencies]
 ark-std = {version = "0.4.0", default-features = false, features = [ "print-trace", "std" ]}
